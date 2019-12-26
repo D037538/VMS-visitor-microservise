@@ -21,6 +21,7 @@ import com.visitor.vmsvisitorservice.service.IVisitorService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.visitor.vmsvisitorservice.dto.VisitorDto;
 import com.visitor.vmsvisitorservice.model.Visitor;
+import com.visitor.vmsvisitorservice.repository.UpdateVisitor;
 import com.visitor.vmsvisitorservice.repository.VisitorRepository;
 
 ;
@@ -32,6 +33,8 @@ public class VisitorCOn {
 
 	@Autowired
 	private VisitorRepository visitorRepository;
+	@Autowired
+	private UpdateVisitor updateVisitor;
 /**
  * It direct to /visitor
  * @param model
@@ -133,9 +136,11 @@ public class VisitorCOn {
 	 * /viewstudents
 	 */
 	@RequestMapping(value = "/editsave", method = RequestMethod.POST)
-	public ModelAndView editsave(@ModelAttribute("visitor") VisitorDto visitorDto) {
-		System.out.println("id is" + visitorDto.getId());
-		iVisitorService.addVisitor(visitorDto);
+	public ModelAndView editsave(@ModelAttribute("visitor") Visitor visitor) {
+		long id=visitor.getId();
+		System.out.println("id is" + visitor.getId());
+	   //iVisitorService.addVisitor(visitorDto);
+			updateVisitor.updateStatusById(id);
 		return new ModelAndView("redirect:/viewvisitor");
 	}
 

@@ -1,6 +1,9 @@
 package com.visitor.vmsvisitorservice.controller;
 
 import java.util.List;
+import java.util.Optional;
+
+import javax.management.loading.PrivateClassLoader;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.visitor.vmsvisitorservice.dto.VisitorDto;
 import com.visitor.vmsvisitorservice.model.Visitor;
+import com.visitor.vmsvisitorservice.repository.VisitorRepository;
 import com.visitor.vmsvisitorservice.service.IVisitorService;
 
 //@Controller
@@ -27,6 +32,8 @@ public class VisitorController {
 
 	@Autowired
 	private IVisitorService visitorService;
+	@Autowired
+	private VisitorRepository visitorRepository;
 	
 	@PostMapping("/addVisitor")
 	public ResponseEntity<String> addVisitor(@RequestBody VisitorDto visitorDto) {
@@ -63,5 +70,12 @@ public class VisitorController {
 	{
 		System.out.println("visitor status"+visitorDto.getStatus());
 		return visitorService.updateVesitorStatus(id, visitorDto);
+	}
+	
+	@GetMapping("/visitorList/{id}")
+	public Optional<Visitor> findme(@PathVariable Long id) throws JsonProcessingException {
+		System.out.println("id in controller is:" + id);
+		return visitorRepository.findById(id);
+
 	}
 }
